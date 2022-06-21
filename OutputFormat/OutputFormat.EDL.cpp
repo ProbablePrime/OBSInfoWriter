@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-const int reelnameMaxlength = 5;
+const char* REELNAME = "OBSIW";
 
 OutputFormatEDL::OutputFormatEDL(const InfoWriterSettings &settings, const std::string filename) : IOutputFormat(), settings(settings), currentFilename(filename), markercount(0), lastMarker(0)
 {
@@ -39,52 +39,33 @@ std::string OutputFormatEDL::SecsToHMSString(const int64_t totalseconds) const
    return buffer;
 }
 
-std::string FilterReelName(const std::string text) {
-   std::string reelname = "";
-
-   for (int idx = 0; idx < reelnameMaxlength; idx++) {
-      if (idx < text.length()) {
-         auto ch = text.at(idx);
-
-         if ((ch >= '0') && (ch <= '9')) {
-            // do nothing
-         }
-         else if ((ch >= 'A') && (ch <= 'Z')) {
-            // do nothing
-         }
-         else if ((ch >= 'a') && (ch <= 'z')) {
-            // uppercase
-            ch += 'A' - 'a';
-         }
-         else {
-            // invalid character
-            ch = '_';
-         }
-
-         reelname += ch;
-      }
-      else {
-         reelname += ' ';
-      }
-   }
-
-   return reelname;
-}
-
 void OutputFormatEDL::writeMarker(const int64_t start, const int64_t stop, const std::string text) const
 {
    char crlf[] = GFNATIVENEXTLINE;
 
-   auto markername = FilterReelName(text);
-
    auto formattedStartTime = SecsToHMSString(start);
    auto formattedStopTime = SecsToHMSString(stop);
 
-   const char *edlformat = "%03d  %s V     C        %s %s %s %s";
+   // Standard EDL Line
+   const char *edlformat = "%03d  %s V     C        %s %s %s %s  ";
    char line[200];
-   sprintf(&line[0], edlformat, markercount, markername.c_str(), formattedStartTime.c_str(), formattedStopTime.c_str(), formattedStartTime.c_str(), formattedStopTime.c_str());
+   sprintf(&line[0], edlformat, markercount, REELNAME, formattedStartTime.c_str(), formattedStopTime.c_str(), formattedStartTime.c_str(), formattedStopTime.c_str());
 
    Groundfloor::String EdlMarkerLine(line);
+
+   // CRLF between standard EDL and EDL "user note"
+   EdlMarkerLine.append_ansi(crlf);
+
+   // User note line, based on DaVinci Resolve format.
+
+   // Notes (we're not using these), Color, Marker name, Duration(which we'll leave at 1(millisecond)) for now.
+   const char* edlMetadataFormat = "%s |C:%s |M:%s |D:1";
+   char metadataLine[200];
+   sprintf(&metadataLine[0], edlMetadataFormat, "", "ResolveColorCyan", text);
+   EdlMarkerLine.append(metadataLine);
+
+   // Double line break to match resolve
+   EdlMarkerLine.append_ansi(crlf);
    EdlMarkerLine.append_ansi(crlf);
 
    WriteGFStringToFile(EdlMarkerLine);
