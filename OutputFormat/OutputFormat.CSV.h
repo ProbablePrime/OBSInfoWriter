@@ -18,7 +18,7 @@ public:
 
    void Start() override;
    void Stop(const int64_t timestamp) override;
-   void HotkeyMarker(const int64_t timestamp, const std::string text) override;
+   void HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color) override;
    void ScenechangeMarker(const int64_t timestamp, const std::string scenename) override;
    void PausedMarker(const int64_t timestamp) override;
    void ResumedMarker(const int64_t timestamp, const int64_t pauselength) override;

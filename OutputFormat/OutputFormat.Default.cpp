@@ -81,7 +81,7 @@ void OutputFormatDefault::Stop(const int64_t timestamp)
 {
 }
 
-void OutputFormatDefault::HotkeyMarker(const int64_t timestamp, const std::string text)
+void OutputFormatDefault::HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color)
 {
    if (this->settings.GetShouldLogHotkeySpecifics())
    {

@@ -84,7 +84,7 @@ void OutputFormatSRT::Stop(const int64_t timestamp)
    this->subtitleCounter++;
 }
 
-void OutputFormatSRT::HotkeyMarker(const int64_t timestamp, const std::string text)
+void OutputFormatSRT::HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color)
 {
    WriteLines(timestamp, text);
 

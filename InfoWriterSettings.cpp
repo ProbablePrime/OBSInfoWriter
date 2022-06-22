@@ -17,23 +17,12 @@ std::string InfoWriterSettings::GetFormat() const
 
 std::string InfoWriterSettings::GetHotkeyText(const int hotkeynum) const
 {
-   if (hotkeynum == 1) return Hotkey1Text;
-   else if (hotkeynum == 2) return Hotkey2Text;
-   else if (hotkeynum == 3) return Hotkey3Text;
-   else if (hotkeynum == 4) return Hotkey4Text;
-   else if (hotkeynum == 5) return Hotkey5Text;
-   else if (hotkeynum == 6) return Hotkey6Text;
-   else if (hotkeynum == 7) return Hotkey7Text;
-   else if (hotkeynum == 8) return Hotkey8Text;
-   else if (hotkeynum == 9) return Hotkey9Text;
-   else if (hotkeynum == 10) return Hotkey10Text;
-   else if (hotkeynum == 11) return Hotkey11Text;
-   else if (hotkeynum == 12) return Hotkey12Text;
-   else if (hotkeynum == 13) return Hotkey13Text;
-   else if (hotkeynum == 14) return Hotkey14Text;
+	return HotKeyText[hotkeynum - 1];
+}
 
-   //assert(hotkeynum > 0 && hotkeynum < 6);
-   return "";
+std::string InfoWriterSettings::GetHotkeyColor(const int hotkeynum) const
+{
+	return HotKeyColor[hotkeynum - 1];
 }
 
 bool InfoWriterSettings::GetShouldLogSceneChanges() const
@@ -73,21 +62,12 @@ void InfoWriterSettings::SetFormat(std::string format)
 
 void InfoWriterSettings::SetHotkeyText(const int hotkeynum, std::string text)
 {
-   if (hotkeynum == 1) Hotkey1Text = text;
-   else if (hotkeynum == 2) Hotkey2Text = text;
-   else if (hotkeynum == 3) Hotkey3Text = text;
-   else if (hotkeynum == 4) Hotkey4Text = text;
-   else if (hotkeynum == 5) Hotkey5Text = text;
-   else if (hotkeynum == 6) Hotkey6Text = text;
-   else if (hotkeynum == 7) Hotkey7Text = text;
-   else if (hotkeynum == 8) Hotkey8Text = text;
-   else if (hotkeynum == 9) Hotkey9Text = text;
-   else if (hotkeynum == 10) Hotkey10Text = text;
-   else if (hotkeynum == 11) Hotkey11Text = text;
-   else if (hotkeynum == 12) Hotkey12Text = text;
-   else if (hotkeynum == 13) Hotkey13Text = text;
-   else if (hotkeynum == 14) Hotkey14Text = text;
+	HotKeyText[hotkeynum - 1] = text;
+}
 
+void InfoWriterSettings::SetHotkeyColor(const int hotkeynum, std::string text)
+{
+	HotKeyColor[hotkeynum - 1] = text;
 }
 
 void InfoWriterSettings::SetShouldLogSceneChanges(bool logchanges)

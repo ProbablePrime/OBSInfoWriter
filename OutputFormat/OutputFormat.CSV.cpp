@@ -62,7 +62,7 @@ void OutputFormatCSV::WriteCSVLine(const int64_t timestamp, const std::string te
    WriteGFStringToFile(currentFilename, line);
 }
 
-void OutputFormatCSV::HotkeyMarker(const int64_t timestamp, const std::string text)
+void OutputFormatCSV::HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color)
 {
    WriteCSVLine(timestamp, text);
 }

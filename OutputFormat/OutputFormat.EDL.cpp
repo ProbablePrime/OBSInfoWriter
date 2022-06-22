@@ -39,7 +39,7 @@ std::string OutputFormatEDL::SecsToHMSString(const int64_t totalseconds) const
    return buffer;
 }
 
-void OutputFormatEDL::writeMarker(const int64_t start, const int64_t stop, const std::string text) const
+void OutputFormatEDL::writeMarker(const int64_t start, const int64_t stop, const std::string text, const std::string color) const
 {
    char crlf[] = GFNATIVENEXTLINE;
 
@@ -61,7 +61,7 @@ void OutputFormatEDL::writeMarker(const int64_t start, const int64_t stop, const
    // Notes (we're not using these), Color, Marker name, Duration(which we'll leave at 1(millisecond)) for now.
    const char* edlMetadataFormat = "%s |C:%s |M:%s |D:1";
    char metadataLine[200];
-   sprintf(&metadataLine[0], edlMetadataFormat, "", "ResolveColorCyan", text);
+   sprintf(&metadataLine[0], edlMetadataFormat, "", ("ResolveColor"+ color).c_str(), text);
    EdlMarkerLine.append(metadataLine);
 
    // Double line break to match resolve
@@ -81,12 +81,12 @@ void OutputFormatEDL::Start()
 void OutputFormatEDL::Stop(const int64_t timestamp)
 {
    // -1 second because if the length is longer than the written video, software might like this EDL even less than it already does
-   writeMarker(lastMarker, timestamp - 1, lastMarkerText);
+   writeMarker(lastMarker, timestamp - 1, lastMarkerText, "Red");
 }
 
-void OutputFormatEDL::HotkeyMarker(const int64_t timestamp, const std::string text)
+void OutputFormatEDL::HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color)
 {
-   writeMarker(lastMarker, timestamp, lastMarkerText);
+   writeMarker(lastMarker, timestamp, lastMarkerText, color);
 
    lastMarker = timestamp;
    lastMarkerText = text;
@@ -96,7 +96,7 @@ void OutputFormatEDL::HotkeyMarker(const int64_t timestamp, const std::string te
 
 void OutputFormatEDL::ScenechangeMarker(const int64_t timestamp, const std::string scenename)
 {
-   writeMarker(lastMarker, timestamp, lastMarkerText);
+   writeMarker(lastMarker, timestamp, lastMarkerText, "Red");
 
    lastMarker = timestamp;
    lastMarkerText = scenename;

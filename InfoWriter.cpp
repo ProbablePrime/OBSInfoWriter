@@ -112,12 +112,13 @@ void InfoWriter::WriteInfo(const InfoHotkey AHotkey) const
 
     auto Now = Groundfloor::GetTimestamp();
     auto hotkey_text = Settings.GetHotkeyText(AHotkey);  
+	auto hotkey_color = Settings.GetHotkeyColor(AHotkey);
 
 	 if (lastInfoMediaType == imtStream) {
-		 output->HotkeyMarker(Now - StartStreamTime, hotkey_text);
+		 output->HotkeyMarker(Now - StartStreamTime, hotkey_text, hotkey_color);
 	 }
 	 else {
-		 output->HotkeyMarker(Now - StartRecordTime - getPausedTime(Now), hotkey_text);
+		 output->HotkeyMarker(Now - StartRecordTime - getPausedTime(Now), hotkey_text, hotkey_color);
 	 }
 
 	 this->WriteInfo("");

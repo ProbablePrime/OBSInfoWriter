@@ -14,14 +14,14 @@ private:
 
    void WriteGFStringToFile(const Groundfloor::String& SData) const;
    std::string SecsToHMSString(const int64_t totalseconds) const;
-   void writeMarker(const int64_t start, const int64_t stop, const std::string text) const;
+   void writeMarker(const int64_t start, const int64_t stop, const std::string text, const std::string color) const;
 public:
    OutputFormatEDL(const InfoWriterSettings &settings, const std::string filename);
 
    void Start() override;
    void Stop(const int64_t timestamp) override;
 
-   void HotkeyMarker(const int64_t timestamp, const std::string text) override;
+   void HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color) override;
    void ScenechangeMarker(const int64_t timestamp, const std::string scenename) override;
    void PausedMarker(const int64_t timestamp) override;
    void ResumedMarker(const int64_t timestamp, const int64_t pauselength) override;
