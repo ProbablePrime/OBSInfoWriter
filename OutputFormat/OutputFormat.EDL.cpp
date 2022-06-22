@@ -4,6 +4,7 @@
 #include <cmath>
 
 const char* REELNAME = "OBSIW";
+const char* EVENTCOLOR = "Red";
 
 OutputFormatEDL::OutputFormatEDL(const InfoWriterSettings &settings, const std::string filename) : IOutputFormat(), settings(settings), currentFilename(filename), markercount(0), lastMarker(0)
 {
@@ -76,42 +77,52 @@ void OutputFormatEDL::Start()
    this->markercount = 1;
    this->lastMarker = 0;
    this->lastMarkerText = "START";
+   this->lastMarkerColor = EVENTCOLOR;
 }
 
 void OutputFormatEDL::Stop(const int64_t timestamp)
 {
-   // -1 second because if the length is longer than the written video, software might like this EDL even less than it already does
-   writeMarker(lastMarker, timestamp - 1, lastMarkerText, "Red");
+   // Clear the Marker "queue" as we're stopping
+   writeMarker(lastMarker, timestamp, lastMarkerText, lastMarkerColor);
+
+   //Increment the marker count so we get a new event Number
+   markercount++;
+   
+   // Also write a stop event
+   writeMarker(timestamp, timestamp, "STOP", EVENTCOLOR);
+}
+
+void OutputFormatEDL::HandleMarker(const int64_t timestamp, const std::string text, const std::string color) {
+    writeMarker(lastMarker, timestamp, lastMarkerText, lastMarkerColor);
+
+    lastMarker = timestamp;
+    lastMarkerText = text;
+    lastMarkerColor = color;
+
+    markercount++;
 }
 
 void OutputFormatEDL::HotkeyMarker(const int64_t timestamp, const std::string text, const std::string color)
 {
-   writeMarker(lastMarker, timestamp, lastMarkerText, color);
-
-   lastMarker = timestamp;
-   lastMarkerText = text;
-
-   markercount++;
+    HandleMarker(timestamp, text, color);
 }
 
 void OutputFormatEDL::ScenechangeMarker(const int64_t timestamp, const std::string scenename)
 {
-   writeMarker(lastMarker, timestamp, lastMarkerText, "Red");
-
-   lastMarker = timestamp;
-   lastMarkerText = scenename;
-
-   markercount++;
+    HandleMarker(timestamp, scenename, EVENTCOLOR);
 }
 
 void OutputFormatEDL::PausedMarker(const int64_t timestamp)
 {
+    HandleMarker(timestamp, "PAUSED", EVENTCOLOR);
 }
 
 void OutputFormatEDL::ResumedMarker(const int64_t timestamp, const int64_t pauselength)
 {
+    HandleMarker(timestamp, "RESUMED", EVENTCOLOR);
 }
 
 void OutputFormatEDL::TextMarker(const std::string text)
 {
+
 }

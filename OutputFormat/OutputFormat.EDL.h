@@ -9,12 +9,14 @@ private:
    int markercount;
    int64_t lastMarker;
    std::string lastMarkerText;
+   std::string lastMarkerColor;
    const InfoWriterSettings &settings;
    std::string currentFilename;
 
    void WriteGFStringToFile(const Groundfloor::String& SData) const;
    std::string SecsToHMSString(const int64_t totalseconds) const;
    void writeMarker(const int64_t start, const int64_t stop, const std::string text, const std::string color) const;
+   void HandleMarker(const int64_t timestamp, const std::string text, const std::string color);
 public:
    OutputFormatEDL(const InfoWriterSettings &settings, const std::string filename);
 
